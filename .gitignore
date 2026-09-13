@@ -1,0 +1,4 @@
+node_modules/
+*.zip
+.sites-stage/
+verifybridge-site.tar.gz

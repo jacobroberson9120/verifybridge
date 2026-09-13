@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VerifyBridge</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main>
+    <header><span class="brand">Verify<span>Bridge</span></span><span class="tag">Link check</span></header>
+    <p class="eyebrow">CURRENT PAGE</p>
+    <p id="domain" class="domain">Checking this page…</p>
+    <section id="result" class="result loading" aria-live="polite">
+      <div class="score">…</div><div><strong>Checking link</strong><p>Looking for common warning signs.</p></div>
+    </section>
+    <section id="reasons" class="reasons" hidden><h2>What we noticed</h2><ul></ul></section>
+    <p class="privacy">This extension checks the page address locally. It does not open the link or send it anywhere.</p>
+    <a id="full-check" class="button" href="https://verifybridge.pages.dev/" target="_blank">Open full VerifyBridge check</a>
+    <p class="fine-print">A warning signal, not a verdict. When in doubt, verify through an official website or phone number you find yourself.</p>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

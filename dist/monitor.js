@@ -1,0 +1,42 @@
+(() => {
+  const key = 'verifybridge-private-summary-v1';
+  const optIn = document.querySelector('#summary-opt-in');
+  const stats = document.querySelector('#summary-stats');
+  const total = document.querySelector('#total-scans');
+  const high = document.querySelector('#high-scans');
+  const clear = document.querySelector('#clear-summary');
+  const exportButton = (() => {
+    const existing = document.querySelector('#export-summary');
+    if (existing) return existing;
+    const button = document.createElement('button');
+    button.id = 'export-summary'; button.type = 'button'; button.className = 'quiet';
+    button.textContent = 'Download my local report';
+    clear?.parentElement?.insertBefore(button, clear);
+    return button;
+  })();
+  const form = document.querySelector('#check-form');
+  const result = document.querySelector('#result');
+  const incidentButton = document.querySelector('#incident-help');
+  const incidentPlan = document.querySelector('#incident-plan');
+  const addFeedback = () => { if (!result.querySelector('.risk-card') || result.querySelector('.feedback-control')) return; const wrap=document.createElement('div'); wrap.className='feedback-control'; const label=document.createElement('span'); label.textContent='Was this result useful?'; wrap.append(label); ['Yes','Not quite'].forEach(choice=>{const b=document.createElement('button'); b.type='button'; b.className='quiet'; b.textContent=choice; b.addEventListener('click',()=>{wrap.replaceChildren(Object.assign(document.createElement('span'),{textContent:choice==='Yes'?'Thanks for the feedback.':'Thanks — we will use that to improve the rules.'}));}); wrap.append(b);}); result.append(wrap); };
+  new MutationObserver(addFeedback).observe(result,{childList:true});
+  let pendingScan = false;
+  const weekId = () => { const now = new Date(); now.setDate(now.getDate() - ((now.getDay() + 6) % 7)); return now.toISOString().slice(0, 10); };
+  const blank = () => ({ enabled: false, week: weekId(), checks: 0, high: 0 });
+  const read = () => { try { return JSON.parse(localStorage.getItem(key)) || blank(); } catch { return blank(); } };
+  const save = data => { try { localStorage.setItem(key, JSON.stringify(data)); } catch {} };
+  const render = () => { const data = read(); if (data.week !== weekId()) { data.week = weekId(); data.checks = 0; data.high = 0; save(data); } optIn.checked = data.enabled; stats.hidden = !data.enabled; total.textContent = data.checks + (data.checks === 1 ? ' check' : ' checks'); high.textContent = data.high + ' high-risk'; };
+  const record = () => { if (!pendingScan) return; pendingScan = false; const data = read(); if (!data.enabled) return; if (data.week !== weekId()) { data.week = weekId(); data.checks = 0; data.high = 0; } const scoreText = result.textContent.split('/')[0]; const match = scoreText.match(/[0-9]+/); if (!match) return; data.checks += 1; if (Number(match[0]) >= 55) data.high += 1; save(data); render(); };
+  optIn.addEventListener('change', () => { const data = read(); data.enabled = optIn.checked; data.week = weekId(); save(data); render(); });
+  clear.addEventListener('click', () => { const data = read(); data.checks = 0; data.high = 0; data.week = weekId(); save(data); render(); });
+  exportButton.addEventListener('click', () => {
+    const data = read();
+    const report = ['VerifyBridge private local report', `Week of: ${data.week}`, `Checks: ${data.checks}`, `High-risk signals: ${data.high}`, '', 'This report contains browser-local totals only. It does not include messages, names, or links.'].join('\n');
+    const blob = new Blob([report], {type: 'text/plain'});
+    const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'verifybridge-local-report.txt'; link.click();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+  });
+  form.addEventListener('submit', () => { pendingScan = true; setTimeout(record, 100); });
+  incidentPlan.hidden = false; incidentButton.textContent = 'Jump to recovery checklist'; incidentButton.addEventListener('click', () => { incidentPlan.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+  render();
+})();

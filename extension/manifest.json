@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "VerifyBridge",
+  "version": "1.0.0",
+  "description": "Check the current page's link for common scam warning signs.",
+  "action": {
+    "default_title": "VerifyBridge: Check this page",
+    "default_popup": "popup.html"
+  },
+  "permissions": ["activeTab"]
+}
