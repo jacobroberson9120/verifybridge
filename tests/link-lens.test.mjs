@@ -9,6 +9,13 @@ test('trusted government domains stay low',()=>{
   assert.equal(result.signals.some(signal=>signal.text.includes('USCIS')),false);
 });
 
+test('government lookalike suffixes are not treated as official hosts',()=>{
+  const uscis=localCheck('https://fakeuscis.gov.example.com/login');
+  assert.ok(uscis.signals.some(signal=>signal.text.includes('USCIS')));
+  const irs=localCheck('https://irs.gov.example.com/refund');
+  assert.ok(irs.signals.some(signal=>signal.text.includes('IRS')));
+});
+
 test('lookalike government login link is high risk',()=>{
   const result=localCheck('http://uscis-gov.secure-login.example.xyz/account/verify');
   assert.equal(levelFor(result.score),'high');

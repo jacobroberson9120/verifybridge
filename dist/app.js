@@ -59,6 +59,7 @@ function addMissionSection(){
   const footer=document.querySelector('footer'),section=node('section',undefined,'mission safety-hub');
   section.innerHTML='<div class="mission-lead"><p class="eyebrow" data-mission="label"></p><h2 data-mission="title"></h2><p data-mission="body"></p></div><div class="mission-grid"><article><h3 data-mission="privacy"></h3><p data-mission="privacyBody"></p></article><article><h3 data-mission="access"></h3><p data-mission="accessBody"></p></article><article class="creator-card"><h3 data-mission="creator"></h3><p data-mission="creatorBody"></p></article></div>';
   footer?.before(section);
+  if(footer&&!footer.querySelector('.privacy-link')){const privacy=node('a','Privacy','privacy-link');privacy.href='./privacy.html';footer.append(privacy);}
   updateMission();
 }
 function updateMission(){const current=missionCopy[lang]||missionCopy.en;document.querySelectorAll('[data-mission]').forEach(element=>{element.textContent=current[element.dataset.mission];});}

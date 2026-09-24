@@ -8,6 +8,8 @@
 
 [Watch the short demo](media/verifybridge-demo.mp4)
 
+[Read the privacy explanation](PRIVACY.md)
+
 
 A browser-based, multilingual scam-message screening prototype for newcomer communities. Built for the OUPI Cyber Clinic Contest 2026, targeting the AI-enabled cybersecurity solution for underserved communities category.
 

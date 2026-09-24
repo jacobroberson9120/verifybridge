@@ -15,8 +15,9 @@ export function localCheck(raw){
   if(host.includes('xn--'))add('Uses punycode that can imitate a familiar name.',28);
   if(['zip','mov','top','xyz','click','link','work','live','cam','rest','cyou','quest'].includes(host.split('.').pop()))add('Uses an unusual domain ending.',14);
   if(['bit.ly','tinyurl.com','t.co','is.gd','cutt.ly','shorturl.at','rebrand.ly','ow.ly'].includes(root))add('Uses a shortened link that hides the final website.',24);
-  if(host.includes('uscis')&&!host.endsWith('uscis.gov'))add('Looks like USCIS but is not uscis.gov.',36);
-  if(host.includes('irs')&&!host.endsWith('irs.gov'))add('Looks like IRS but is not irs.gov.',36);
+  const officialHost=domain=>host===domain||host.endsWith('.'+domain);
+  if(host.includes('uscis')&&!officialHost('uscis.gov'))add('Looks like USCIS but is not uscis.gov.',36);
+  if(/(?:^|[.-])irs(?:[.-]|$)/.test(host)&&!officialHost('irs.gov'))add('Looks like IRS but is not irs.gov.',36);
   if(host.includes('gov')&&!host.endsWith('.gov'))add('Uses gov in the name but is not a .gov website.',24);
   if(labels.length>=4)add('Uses several subdomains, which can make the real website harder to see.',12);
   if(/\b(account|secure|verify|login|signin|support|wallet|payment|update)\b/i.test(host.replaceAll('-',' ')))add('Puts account or security words in the website name.',12);
