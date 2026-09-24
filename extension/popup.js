@@ -3,9 +3,9 @@ const ui = {
     messageTab: 'Email message', linkTab: 'Page link', optIn: 'YOU CHOOSE WHAT TO SCAN',
     messageTitle: 'Check selected email text', messageHelp: 'In Gmail or Outlook, highlight the message text you want checked. VerifyBridge reads it only after you press the button.',
     scanSelection: 'Scan selected text', currentPage: 'CURRENT PAGE', waiting: 'Waiting to check this page…', scanLink: 'Check this page link',
-    noticed: 'What we noticed', privacy: 'Nothing is scanned automatically. Checks run locally after you choose Scan; selected message text is not saved or sent.',
+    noticed: 'What we noticed', privacy: 'Nothing is scanned automatically. Checks run locally after you choose Scan; selected message text is not saved or sent.', privacyDetails: 'Read privacy details',
     fullCheck: 'Open full VerifyBridge', finePrint: 'A warning signal, not a verdict. Verify important requests through an official site or phone number you find yourself.',
-    selectFirst: 'Highlight text in an open Gmail or Outlook message, then try again.', unsupportedMail: 'Open Gmail or Outlook before scanning selected message text.',
+    selectFirst: 'Highlight text in an open Gmail or Outlook message, then try again.', unsupportedMail: 'Open Gmail or Outlook before scanning selected message text.', scanFailed: 'The browser could not read the selection. Refresh the email tab and try again.',
     pageUnsupported: 'Open a regular web page first.', high: 'High risk signal', caution: 'Caution signal', low: 'Low risk signal',
     highAdvice: 'Pause. Do not pay, sign in, or share a code until you verify independently.', cautionAdvice: 'This deserves a closer look through an official source.', lowAdvice: 'Few common warning signs were found. This does not prove it is safe.'
   },
@@ -13,9 +13,9 @@ const ui = {
     messageTab: 'Mensaje de correo', linkTab: 'Enlace de página', optIn: 'TÚ ELIGES QUÉ REVISAR',
     messageTitle: 'Revisa el texto seleccionado', messageHelp: 'En Gmail u Outlook, selecciona el texto que quieres revisar. VerifyBridge solo lo lee después de presionar el botón.',
     scanSelection: 'Revisar texto seleccionado', currentPage: 'PÁGINA ACTUAL', waiting: 'Esperando para revisar esta página…', scanLink: 'Revisar enlace de esta página',
-    noticed: 'Lo que notamos', privacy: 'Nada se revisa automáticamente. El análisis local comienza cuando eliges Revisar; el texto no se guarda ni se envía.',
+    noticed: 'Lo que notamos', privacy: 'Nada se revisa automáticamente. El análisis local comienza cuando eliges Revisar; el texto no se guarda ni se envía.', privacyDetails: 'Leer detalles de privacidad',
     fullCheck: 'Abrir VerifyBridge completo', finePrint: 'Es una señal de advertencia, no un veredicto. Verifica solicitudes importantes mediante una fuente oficial.',
-    selectFirst: 'Selecciona texto en un mensaje abierto de Gmail u Outlook e inténtalo de nuevo.', unsupportedMail: 'Abre Gmail u Outlook antes de revisar texto seleccionado.',
+    selectFirst: 'Selecciona texto en un mensaje abierto de Gmail u Outlook e inténtalo de nuevo.', unsupportedMail: 'Abre Gmail u Outlook antes de revisar texto seleccionado.', scanFailed: 'El navegador no pudo leer la selección. Actualiza la pestaña del correo e inténtalo de nuevo.',
     pageUnsupported: 'Primero abre una página web normal.', high: 'Señal de riesgo alto', caution: 'Señal de precaución', low: 'Señal de riesgo bajo',
     highAdvice: 'Detente. No pagues, inicies sesión ni compartas códigos hasta verificar por separado.', cautionAdvice: 'Esto merece una revisión mediante una fuente oficial.', lowAdvice: 'Se encontraron pocas señales comunes. Esto no demuestra que sea seguro.'
   }
@@ -101,13 +101,15 @@ async function activeTab() {
 }
 
 $('#scan-selection').addEventListener('click', async () => {
-  const tab = await activeTab();
-  const allowed = /^https:\/\/(mail\.google\.com|outlook\.live\.com|outlook\.office\.com|outlook\.office365\.com)\//i.test(tab?.url || '');
-  if (!allowed) { status.textContent = text('unsupportedMail'); return; }
-  const [{ result: selected = '' } = {}] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: () => window.getSelection()?.toString().trim() || '' });
-  if (!selected) { status.textContent = text('selectFirst'); return; }
-  status.textContent = '';
-  show(inspectMessage(selected.slice(0, 10000)));
+  try {
+    const tab = await activeTab();
+    const allowed = /^https:\/\/(mail\.google\.com|outlook\.live\.com|outlook\.office\.com|outlook\.office365\.com)\//i.test(tab?.url || '');
+    if (!allowed) { status.textContent = text('unsupportedMail'); return; }
+    const [{ result: selected = '' } = {}] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: () => window.getSelection()?.toString().trim() || '' });
+    if (!selected) { status.textContent = text('selectFirst'); return; }
+    status.textContent = '';
+    show(inspectMessage(selected.slice(0, 10000)));
+  } catch { status.textContent = text('scanFailed'); }
 });
 
 $('#scan-link').addEventListener('click', async () => {
