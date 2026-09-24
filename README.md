@@ -15,6 +15,21 @@ A browser-based, multilingual scam-message screening prototype for newcomer comm
 
 Install Node.js 20 or newer, then run `node server.mjs` from this folder. Open http://127.0.0.1:4173. No package installation or API key is required. The checked-in model is ready to use. Run `node --test tests/engine.test.mjs` for regression tests and `node scripts/train.mjs` to reproduce the model from `data/training.json`. Equivalent npm scripts are also provided.
 
+## Chrome extension
+
+The optional extension checks the current page address or message text that the user explicitly selects in Gmail or Outlook. It does not monitor email, scan the inbox automatically, request broad website access, save selected text, or send message text to a server.
+
+To install it locally in Chrome:
+
+1. Download or clone this repository.
+2. Open `chrome://extensions` in Chrome.
+3. Turn on **Developer mode**.
+4. Choose **Load unpacked** and select the `extension` folder.
+5. Pin VerifyBridge from the Extensions menu.
+6. In Gmail or Outlook, highlight the text of one open message, open VerifyBridge, and choose **Scan selected text**. The extension also provides an opt-in **Page link** check.
+
+The extension interface supports English and Spanish. Its `activeTab` and `scripting` permissions apply only after the user opens the extension and starts a check.
+
 ## Optional live link reputation
 
 Link Lens always runs its address-structure check locally. The optional live check sends only the submitted link to the `/api/scan` endpoint, which can query Google Web Risk for malware, social engineering, and unwanted software signals. Configure the server-side `WEB_RISK_API_KEY` secret in the hosting provider; never place the key in `dist/`, client JavaScript, source control, or browser-visible configuration. If the secret or endpoint is unavailable, Link Lens remains usable with the local result and explains that the live signal could not be retrieved.

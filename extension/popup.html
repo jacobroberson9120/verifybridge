@@ -8,16 +8,31 @@
 </head>
 <body>
   <main>
-    <header><span class="brand">Verify<span>Bridge</span></span><span class="tag">Link check</span></header>
-    <p class="eyebrow">CURRENT PAGE</p>
-    <p id="domain" class="domain">Checking this page…</p>
-    <section id="result" class="result loading" aria-live="polite">
-      <div class="score">…</div><div><strong>Checking link</strong><p>Looking for common warning signs.</p></div>
+    <header>
+      <span class="brand">Verify<span>Bridge</span></span>
+      <label class="language"><span class="sr-only">Language</span><select id="language"><option value="en">English</option><option value="es">Español</option></select></label>
+    </header>
+    <nav class="tabs" aria-label="Scanner type">
+      <button id="message-tab" class="tab active" type="button" data-copy="messageTab">Email message</button>
+      <button id="link-tab" class="tab" type="button" data-copy="linkTab">Page link</button>
+    </nav>
+    <section id="message-panel">
+      <p class="eyebrow" data-copy="optIn">YOU CHOOSE WHAT TO SCAN</p>
+      <h1 data-copy="messageTitle">Check selected email text</h1>
+      <p class="intro" data-copy="messageHelp">In Gmail or Outlook, highlight the message text you want checked. VerifyBridge reads it only after you press the button.</p>
+      <button id="scan-selection" class="button" type="button" data-copy="scanSelection">Scan selected text</button>
+      <p id="selection-status" class="status" role="status"></p>
     </section>
-    <section id="reasons" class="reasons" hidden><h2>What we noticed</h2><ul></ul></section>
-    <p class="privacy">This extension checks the page address locally. It does not open the link or send it anywhere.</p>
-    <a id="full-check" class="button" href="https://verifybridge.pages.dev/" target="_blank">Open full VerifyBridge check</a>
-    <p class="fine-print">A warning signal, not a verdict. When in doubt, verify through an official website or phone number you find yourself.</p>
+    <section id="link-panel" hidden>
+      <p class="eyebrow" data-copy="currentPage">CURRENT PAGE</p>
+      <p id="domain" class="domain" data-copy="waiting">Waiting to check this page…</p>
+      <button id="scan-link" class="button" type="button" data-copy="scanLink">Check this page link</button>
+    </section>
+    <section id="result" class="result loading" aria-live="polite" hidden></section>
+    <section id="reasons" class="reasons" hidden><h2 data-copy="noticed">What we noticed</h2><ul></ul></section>
+    <p class="privacy" data-copy="privacy">Nothing is scanned automatically. Checks run locally after you choose Scan; selected message text is not saved or sent.</p>
+    <a id="full-check" class="secondary" href="https://verifybridgecheck.com/" target="_blank" data-copy="fullCheck">Open full VerifyBridge</a>
+    <p class="fine-print" data-copy="finePrint">A warning signal, not a verdict. Verify important requests through an official site or phone number you find yourself.</p>
   </main>
   <script src="popup.js"></script>
 </body>

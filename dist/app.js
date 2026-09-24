@@ -43,6 +43,24 @@ empty();
 updateCount();
 enhanceDemoPath();
 enhanceRecoveryPlan();
+extraCopy.en.try='Try an example';
+extraCopy.es.try='Prueba un ejemplo';
 renderExamples();
 document.querySelectorAll('.scan-tab').forEach(tab=>{tab.setAttribute('role','tab');tab.setAttribute('aria-selected',tab.classList.contains('active')?'true':'false');tab.addEventListener('click',()=>document.querySelectorAll('.scan-tab').forEach(other=>other.setAttribute('aria-selected',other===tab?'true':'false')));});
 const requestedDemo=new URLSearchParams(location.search).get('demo');if(requestedDemo==='message')setTimeout(()=>void check(examples.en.threat),250);if(requestedDemo==='link')setTimeout(()=>{setMode('link');urlField.value=linkExamples.fake.url;inspectLink(false);},250);if(requestedDemo==='recovery')setTimeout(()=>$('#incident-plan')?.scrollIntoView({block:'start'}),250);if(requestedDemo==='summary')setTimeout(()=>$('#summary-title')?.scrollIntoView({block:'start'}),250);
+const missionCopy={
+  en:{label:'Why VerifyBridge exists',title:'A safer pause before a risky decision',body:'Scams often rely on urgency, unfamiliar systems, and language barriers. VerifyBridge gives people a private place to inspect a message or link, understand the warning signs, and choose a safer next step.',privacy:'Private by design',privacyBody:'Core message and link checks run in the browser. No account is required, and message text is not saved or sent.',access:'Built for access',accessBody:'Clear explanations, four interface languages, mobile support, and practical recovery guidance help more people use cybersecurity tools.',creator:'Created by Jacob Roberson',creatorBody:'VerifyBridge was created for the OUPI Cyber Clinic Contest 2026 to explore explainable, community-focused cybersecurity for underserved communities.'},
+  es:{label:'Por qué existe VerifyBridge',title:'Una pausa más segura antes de una decisión riesgosa',body:'Las estafas suelen aprovechar la urgencia, los sistemas desconocidos y las barreras del idioma. VerifyBridge ofrece un lugar privado para revisar un mensaje o enlace, entender las señales y elegir un paso más seguro.',privacy:'Privacidad desde el diseño',privacyBody:'Las revisiones principales se ejecutan en el navegador. No se necesita una cuenta y el texto no se guarda ni se envía.',access:'Creado para ser accesible',accessBody:'Explicaciones claras, cuatro idiomas, soporte móvil y orientación práctica permiten que más personas usen herramientas de ciberseguridad.',creator:'Creado por Jacob Roberson',creatorBody:'VerifyBridge fue creado para el Concurso OUPI Cyber Clinic 2026 y explora una ciberseguridad explicable y enfocada en comunidades desatendidas.'},
+  vi:{label:'Lý do VerifyBridge tồn tại',title:'Một khoảng dừng an toàn trước quyết định rủi ro',body:'Lừa đảo thường lợi dụng sự khẩn cấp, hệ thống xa lạ và rào cản ngôn ngữ. VerifyBridge cung cấp nơi riêng tư để kiểm tra tin nhắn hoặc liên kết, hiểu dấu hiệu cảnh báo và chọn bước an toàn hơn.',privacy:'Riêng tư ngay từ thiết kế',privacyBody:'Việc kiểm tra cốt lõi chạy trong trình duyệt. Không cần tài khoản và nội dung tin nhắn không được lưu hoặc gửi đi.',access:'Thiết kế để dễ tiếp cận',accessBody:'Giải thích rõ ràng, bốn ngôn ngữ, hỗ trợ di động và hướng dẫn khôi phục giúp nhiều người tiếp cận công cụ an ninh mạng hơn.',creator:'Được tạo bởi Jacob Roberson',creatorBody:'VerifyBridge được tạo cho Cuộc thi OUPI Cyber Clinic 2026 nhằm khám phá an ninh mạng dễ giải thích và hướng đến cộng đồng chưa được phục vụ đầy đủ.'},
+  zh:{label:'VerifyBridge 的使命',title:'在高风险决定前多一次安全停顿',body:'诈骗常利用紧迫感、陌生制度和语言障碍。VerifyBridge 提供私密空间，让用户检查消息或链接、理解警示信号并选择更安全的下一步。',privacy:'隐私优先设计',privacyBody:'核心消息和链接检查在浏览器中运行，无需账户，消息文本不会被保存或发送。',access:'为无障碍使用而构建',accessBody:'清晰说明、四种界面语言、移动设备支持和实用恢复指导，让更多人能使用网络安全工具。',creator:'由 Jacob Roberson 创建',creatorBody:'VerifyBridge 为 2026 OUPI Cyber Clinic 竞赛创建，探索可解释、以服务不足社区为中心的网络安全。'}
+};
+function addMissionSection(){
+  if(document.querySelector('.mission'))return;
+  const footer=document.querySelector('footer'),section=node('section',undefined,'mission safety-hub');
+  section.innerHTML='<div class="mission-lead"><p class="eyebrow" data-mission="label"></p><h2 data-mission="title"></h2><p data-mission="body"></p></div><div class="mission-grid"><article><h3 data-mission="privacy"></h3><p data-mission="privacyBody"></p></article><article><h3 data-mission="access"></h3><p data-mission="accessBody"></p></article><article class="creator-card"><h3 data-mission="creator"></h3><p data-mission="creatorBody"></p></article></div>';
+  footer?.before(section);
+  updateMission();
+}
+function updateMission(){const current=missionCopy[lang]||missionCopy.en;document.querySelectorAll('[data-mission]').forEach(element=>{element.textContent=current[element.dataset.mission];});}
+addMissionSection();
+$('#language').addEventListener('change',()=>queueMicrotask(updateMission));

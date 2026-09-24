@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
   "name": "VerifyBridge",
-  "version": "1.0.0",
-  "description": "Check the current page's link for common scam warning signs.",
+  "version": "1.1.0",
+  "description": "Privately check the current link or selected Gmail and Outlook message text for scam warning signs.",
   "action": {
     "default_title": "VerifyBridge: Check this page",
     "default_popup": "popup.html"
   },
-  "permissions": ["activeTab"]
+  "permissions": ["activeTab", "scripting"]
 }
